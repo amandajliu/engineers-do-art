@@ -84,4 +84,4 @@ def preserve_color_lab(image_name):
 
 preserve_color_YCbCr('boston_YCC.jpg')
 preserve_color_RGB('boston_RGB.jpg')
-#preserve_color_lab('hongkong_lab.png')
+preserve_color_lab('hongkong_lab.png')
