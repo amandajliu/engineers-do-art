@@ -1,13 +1,13 @@
 import numpy
 from PIL import Image as im
-#from skimage import io, color, novice
+from skimage import io, color, novice
 
-def preserve_color_YCbCr(image_name):	 
-	contentIm = im.open('boston.jpg')
+def preserve_color_YCbCr(content, stylized, out_name):	 
+	contentIm = im.open(content)
 	contentIm = contentIm.convert("YCbCr")
 	contentImYUV = numpy.array(contentIm)
 
-	stylizedIm = im.open('monet-boston.jpg')
+	stylizedIm = im.open(stylized)
 	stylizedIm = stylizedIm.convert("YCbCr")
 	stylizedImYUV = numpy.array(stylizedIm)
 
@@ -17,15 +17,15 @@ def preserve_color_YCbCr(image_name):
 
 	out = im.fromarray(contentImYUV, 'YCbCr')
 
-	out.save(image_name)
+	out.save(out_name)
 	out.show()
 
-def preserve_color_RGB(image_name):
-	contentIm = im.open('boston.jpg')
+def preserve_color_RGB(content, stylized, out_name):
+	contentIm = im.open(content)
 	contentIm = contentIm.convert("RGB")
 	contentArray = numpy.array(contentIm)
 
-	stylizedIm = im.open('monet-boston.jpg')
+	stylizedIm = im.open(stylized)
 	stylizedIm = stylizedIm.convert("RGB")
 	stylizedArray = numpy.array(stylizedIm)
 
@@ -43,7 +43,7 @@ def preserve_color_RGB(image_name):
 
 	out = im.fromarray(outArray.astype('uint8'), 'RGB')
 
-	out.save(image_name)
+	out.save(out_name)
 	out.show()
 
 def preserve_color_lab(image_name):
@@ -82,6 +82,6 @@ def preserve_color_lab(image_name):
 	out1.show()
 	out1.save(image_name)
 
-preserve_color_YCbCr('boston_YCC.jpg')
-preserve_color_RGB('boston_RGB.jpg')
+preserve_color_YCbCr('puppies.jpg', 'picasso-pups.jpg', 'puppies_YCC.jpg')
+preserve_color_RGB('puppies.jpg', 'picasso-pups.jpg', 'puppies_RGB.jpg')
 preserve_color_lab('hongkong_lab.png')
