@@ -82,6 +82,6 @@ def preserve_color_lab(image_name):
 	out1.show()
 	out1.save(image_name)
 
-preserve_color_YCbCr('puppies.jpg', 'picasso-pups.jpg', 'puppies_YCC.jpg')
-preserve_color_RGB('puppies.jpg', 'picasso-pups.jpg', 'puppies_RGB.jpg')
+preserve_color_YCbCr('stata.jpg', 'chinese-stata.jpg', 'stata_YCC.jpg')
+preserve_color_RGB('stata.jpg', 'chinese-stata.jpg', 'stata_RGB.jpg')
 preserve_color_lab('hongkong_lab.png')
