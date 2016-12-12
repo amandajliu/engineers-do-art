@@ -1,6 +1,7 @@
 import numpy
 from PIL import Image as im
 from skimage import io, color, novice
+from skimage.viewer import ImageViewer
 
 def preserve_color_YCbCr(content, stylized, out_name):	 
 	contentIm = im.open(content)
@@ -29,8 +30,8 @@ def preserve_color_RGB(content, stylized, out_name):
 	stylizedIm = stylizedIm.convert("RGB")
 	stylizedArray = numpy.array(stylizedIm)
 
-	CONTENT_WEIGHT = 0.5
-	STYLIZED_WEIGHT = 0.5
+	CONTENT_WEIGHT = 0.7
+	STYLIZED_WEIGHT = 0.3
 	height = len(contentArray)
 	width = len(contentArray[0])
 	outArray = numpy.empty((height, width, 3))
@@ -82,6 +83,40 @@ def preserve_color_lab(image_name):
 	out1.show()
 	out1.save(image_name)
 
-preserve_color_YCbCr('stata.jpg', 'chinese-stata.jpg', 'stata_YCC.jpg')
-preserve_color_RGB('stata.jpg', 'chinese-stata.jpg', 'stata_RGB.jpg')
+def preserve_color_cielab(content, stylized, image_name):
+	rgbContent = io.imread('hongkong.jpg')
+	labContent = color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbContent)))
+	labContentArray = numpy.array(labContent)
+	rgbStyle = io.imread('hongkong-guernica.jpg')
+	labStyle = color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbStyle)))
+	labStyleArray = numpy.array(labStyle)
+
+	for i in range(len(labContentArray)):
+		for j in range(len(labContentArray[0])):
+			labContentArray[i][j][0] = labStyleArray[i][j][0]
+
+	labContentArray = color.xyz2rgb(color.lab2xyz(labContentArray))
+	viewer = ImageViewer(labContentArray)
+	viewer.show()
+
+def preserve_color_cielch(content, stylized, image_name):
+	rgbContent = io.imread(content)
+	labContent = color.lab2lch(color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbContent))))
+	labContentArray = numpy.array(labContent)
+	rgbStyle = io.imread(stylized)
+	labStyle = color.lab2lch(color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbStyle))))
+	labStyleArray = numpy.array(labStyle)
+
+	for i in range(len(labContentArray)):
+		for j in range(len(labContentArray[0])):
+			labContentArray[i][j][0] = labStyleArray[i][j][0]
+
+	labContentArray = color.xyz2rgb(color.lab2xyz(color.lch2lab(labContentArray)))
+	viewer = ImageViewer(labContentArray)
+	viewer.show()
+
+
+#preserve_color_YCbCr('stata.jpg', 'chinese-stata.jpg', 'stata_YCC.jpg')
+#preserve_color_RGB('yosemite.jpg', 'afremov-yosemite.jpg', 'yosemite_RGB_73.jpg')
 preserve_color_lab('hongkong_lab.png')
+preserve_color_cielch('yosemite.jpg', 'afremov-yosemite.jpg', 'yosemite_LCh.jpg')
