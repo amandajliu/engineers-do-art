@@ -3,7 +3,7 @@ from PIL import Image as im
 from skimage import io, color, novice
 from skimage.viewer import ImageViewer
 
-def preserve_color_YCbCr(content, stylized, out_name):	 
+def preserve_color_YCbCr(content, stylized, out_name):
 	contentIm = im.open(content)
 	contentIm = contentIm.convert("YCbCr")
 	contentImYUV = numpy.array(contentIm)
@@ -48,7 +48,6 @@ def preserve_color_RGB(content, stylized, out_name):
 	out.show()
 
 def preserve_color_lab(content, stylized, image_name):
-
 	rgbContent = io.imread(content)
 	labContent = color.rgb2lab(numpy.asarray(rgbContent)/255.0)
 	labContentArray = numpy.array(labContent)
@@ -85,10 +84,10 @@ def preserve_color_lab(content, stylized, image_name):
 
 def preserve_color_cielch(content, stylized, image_name):
 	rgbContent = io.imread(content)
-	labContent = color.lab2lch(color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbContent))))
+	labContent = color.lab2lch(color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbContent)/255.)))
 	labContentArray = numpy.array(labContent)
 	rgbStyle = io.imread(stylized)
-	labStyle = color.lab2lch(color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbStyle))))
+	labStyle = color.lab2lch(color.xyz2lab(color.rgb2xyz(numpy.asarray(rgbStyle)/255.)))
 	labStyleArray = numpy.array(labStyle)
 
 	for i in range(len(labContentArray)):
@@ -97,9 +96,7 @@ def preserve_color_cielch(content, stylized, image_name):
 
 	labContentArray = color.xyz2rgb(color.lab2xyz(color.lch2lab(labContentArray)))
 	viewer = ImageViewer(labContentArray)
-	out = im.fromarray(labContentArray.astype('uint8'), 'RGB')
-	out.show()
-	out.save(image_name)
+	viewer.show()
 
 
 preserve_color_YCbCr('yosemite.jpg', 'afremov-yosemite.jpg', 'yosemite_YCC.jpg')
